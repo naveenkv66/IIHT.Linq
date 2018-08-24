@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -187,6 +187,7 @@ namespace IIHT.Linq
             var TeamA = shuffledPlayers.Take(halfWay).ToList();
             var TeamB = shuffledPlayers.Skip(halfWay).ToList();
             PrintPossibleMatches(TeamA, TeamB);
+            Console.WriteLine();
         }
         static void Excersise3()
         {
@@ -203,6 +204,9 @@ namespace IIHT.Linq
                 Console.WriteLine("{0,4}{1,14}{2,16}{3,5}",
                                    item.OrderId, item.ItemName, item.OrderDate.Date.ToShortDateString(), item.quantity);
             });
+            Console.WriteLine();
+            Console.ReadLine();
+
         }
         static void Excersise4()
         {
@@ -267,10 +271,12 @@ namespace IIHT.Linq
 
             });
             Console.WriteLine();
+            Console.ReadLine();
+
         }
         static void Excersise6()
         {
-            Console.WriteLine("Excersise6");
+            Console.WriteLine("Excersise6 :Using anonymous");
 
             var Orders = GetOrders();
             var Items = GetItems();
@@ -300,6 +306,7 @@ namespace IIHT.Linq
 
 
             });
+            Console.WriteLine();
 
             Console.ReadLine();
         }
@@ -314,14 +321,41 @@ namespace IIHT.Linq
             Console.WriteLine($"Check if all the quantities in the Order collection is >0 : {QuantitesinOrderCollectionGreaterThanZero}");
             Console.WriteLine($"name of the item that was ordered in largest quantity in a single order: {orderWithMaxQuantiy}");
             Console.WriteLine();
-            Console.WriteLine("Excersise9");
+           
         }
         static void Excersise8()
         {
+            Console.WriteLine("Excersise8 :using linq  Method Syntax");
+
+            var Orders = GetOrders();
+            var Items = GetItems();
+            var groupByMonthResult = (Orders.Join(Items, order => order.ItemName, item => item.ItemName, (order, item) => new
+            {
+                Order = order,
+                Item = item
+            }).GroupBy(order => order.Order.OrderDate.Month)).ToList();
+
+            groupByMonthResult.ForEach(ordrGroups =>
+            {
+                Console.WriteLine($"Month: {ordrGroups.Key}");
+                Console.WriteLine();
+                Console.WriteLine("{0,4}{1,14}{2,16}{3,11}{4,15}",
+                    "Id", "ItemName", "OrderDate", "Quantiy", "TotalPrice");
+                foreach (var order in ordrGroups.OrderByDescending(x => x.Order.OrderDate).ThenByDescending(y => y.Order.quantity))
+                {
+                    Console.WriteLine("{0,4}{1,14}{2,16}{3,5}{4,15}",
+                                   order.Order.OrderId, order.Item.ItemName, order.Order.OrderDate.Date.ToShortDateString(), order.Order.quantity, order.Order.quantity * order.Item.Price);
+                }
+
+
+            });
+            Console.WriteLine();
+            Console.ReadLine();
 
         }
         static void Excersise9()
         {
+            Console.WriteLine("Excersise9");
             int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
             CountAndDisplayEvenNumber(numbers);
             Console.ReadLine();
